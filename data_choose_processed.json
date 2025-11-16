@@ -1,0 +1,82 @@
+[
+  {
+    "label_center": "Ref",
+    "label_left": "in {}",
+    "label_right": "A {} in",
+    "image_center_path": "temp_images/00_20250622_111626_525.jpg",
+    "image_left": {
+      "look": "temp_images/cat_lookout_20250622_111626_567.jpg",
+      "boat": "temp_images/9_20250622_111626_578.jpg",
+      "glass": "temp_images/cat_glass_20250622_111626_603.jpg"
+    },
+    "image_right": {
+      "dragon": "temp_images/1_20250622_111626_651.jpg",
+      "bedroom": "temp_images/7_20250622_111626_657.jpg",
+      "flower": "temp_images/1_20250622_111626_690.jpg"
+    }
+  },
+  {
+    "label_center": "Ref",
+    "label_left": "in {}",
+    "label_right": "A {} in",
+    "image_center_path": "temp_images/00_20250622_111626_712.jpg",
+    "image_left": {
+      "park": "temp_images/0_20250622_111626_732.jpg",
+      "beach": "temp_images/3_20250622_111626_753.jpg",
+      "anime": "temp_images/0_20250622_111626_773.jpg"
+    },
+    "image_right": {
+      "crown": "temp_images/4_20250622_111626_793.jpg",
+      "bus": "temp_images/4_20250622_111626_814.jpg",
+      "bunny": "temp_images/bunny_art_20250622_111626_836.jpg"
+    }
+  },
+  {
+    "label_center": "Ref",
+    "label_left": "in {}",
+    "label_right": "A {} in",
+    "image_center_path": "temp_images/00_20250622_111626_864.jpg",
+    "image_left": {
+      "downtown": "temp_images/2_20250622_111626_885.jpg",
+      "mountain": "temp_images/6_20250622_111626_906.jpg",
+      "river": "temp_images/3_20250622_111626_927.jpg"
+    },
+    "image_right": {
+      "cat": "temp_images/1_20250622_111626_949.jpg",
+      "deer": "temp_images/2_20250622_111626_970.jpg",
+      "piano": "temp_images/1_20250622_111626_992.jpg"
+    }
+  },
+  {
+    "label_center": "Ref",
+    "label_left": "in {}",
+    "label_right": "A {} in",
+    "image_center_path": "temp_images/00_20250622_111627_013.jpg",
+    "image_left": {
+      "jungle": "temp_images/4_20250622_111627_032.jpg",
+      "galaxy": "temp_images/2_20250622_111627_053.jpg",
+      "dessert": "temp_images/4_20250622_111627_059.jpg"
+    },
+    "image_right": {
+      "robot": "temp_images/1_20250622_111627_080.jpg",
+      "cat": "temp_images/9_20250622_111627_098.jpg",
+      "chair": "temp_images/1_20250622_111627_103.jpg"
+    }
+  },
+  {
+    "label_center": "Ref",
+    "label_left": "in {}",
+    "label_right": "A {} in",
+    "image_center_path": "temp_images/00_20250622_111627_121.jpg",
+    "image_left": {
+      "realism": "temp_images/0_20250622_111627_146.jpg",
+      "paris": "temp_images/0_20250622_111627_152.jpg",
+      "transparent": "temp_images/0_20250622_111627_157.jpg"
+    },
+    "image_right": {
+      "dinosaur": "temp_images/5_20250622_111627_162.jpg",
+      "dog": "temp_images/0_20250622_111627_185.jpg",
+      "flower": "temp_images/1_20250622_111627_207.jpg"
+    }
+  }
+]

@@ -1,0 +1,563 @@
+[
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111634_958.jpg",
+      "prompt": "Prompt for the reference image 1",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/9_20250622_111635_001.jpg",
+        "prompt": "in the jungle",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_013.jpg",
+        "prompt": "on the river",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/2_20250622_111635_020.jpg",
+        "prompt": "A capybara in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_031.jpg",
+        "prompt": "A girl in",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/3_20250622_111635_046.jpg",
+        "prompt": "on a table",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/4_20250622_111635_053.jpg",
+        "prompt": "on beach",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_064.jpg",
+        "prompt": "A dog in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_076.jpg",
+        "prompt": "A castle in",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_085.jpg",
+      "prompt": "Prompt for the reference image 2",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/4_20250622_111635_111.jpg",
+        "prompt": "on mountain",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_117.jpg",
+        "prompt": "in anime style",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/car_20250622_111635_122.jpg",
+        "prompt": "A car in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/deer_20250622_111635_127.jpg",
+        "prompt": "A deer in",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/5_20250622_111635_131.jpg",
+        "prompt": "in the jungle",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_137.jpg",
+        "prompt": "with a tree and autumn leaves in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/3_20250622_111635_142.jpg",
+        "prompt": "A laptop in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/1_20250622_111635_147.jpg",
+        "prompt": "A lighthouse in",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_152.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/0_20250622_111635_170.jpg",
+        "prompt": "in bathtub",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/4_20250622_111635_176.jpg",
+        "prompt": "with a wheat field in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/5_20250622_111635_182.jpg",
+        "prompt": "A boy wearing a crown in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_187.jpg",
+        "prompt": "A capybara in",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/6_20250622_111635_192.jpg",
+        "prompt": "made of silver",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/1_20250622_111635_197.jpg",
+        "prompt": "made of crystal",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/7_20250622_111635_202.jpg",
+        "prompt": "A piano in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_207.jpg",
+        "prompt": "A truck in",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_213.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/9_20250622_111635_232.jpg",
+        "prompt": "floating on the water",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/8_20250622_111635_237.jpg",
+        "prompt": "as a sticker",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/7_20250622_111635_242.jpg",
+        "prompt": "A cat in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/1_20250622_111635_247.jpg",
+        "prompt": "A chair in",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/5_20250622_111635_253.jpg",
+        "prompt": "in the dessert",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/3_20250622_111635_258.jpg",
+        "prompt": "in the snow",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_264.jpg",
+        "prompt": "A dragon in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_270.jpg",
+        "prompt": "A bunny in ",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_275.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/1_20250622_111635_293.jpg",
+        "prompt": "in swimming pool",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/2_20250622_111635_299.jpg",
+        "prompt": "as a sticker",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_304.jpg",
+        "prompt": "A dragon in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_309.jpg",
+        "prompt": "A castle in ",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/0_20250622_111635_313.jpg",
+        "prompt": " with the Eiffel Tower in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_319.jpg",
+        "prompt": " in oil painting style",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_325.jpg",
+        "prompt": "A car in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_330.jpg",
+        "prompt": "A cup in ",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_334.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/5_20250622_111635_354.jpg",
+        "prompt": "on the beach",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/2_20250622_111635_361.jpg",
+        "prompt": "with a tree and autumn leaves in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/2_20250622_111635_367.jpg",
+        "prompt": "A flower in",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/3_20250622_111635_372.jpg",
+        "prompt": "A robot in",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/6_20250622_111635_377.jpg",
+        "prompt": "in space",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_383.jpg",
+        "prompt": "in the dessert",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/7_20250622_111635_388.jpg",
+        "prompt": "A bedroom in  ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/7_20250622_111635_393.jpg",
+        "prompt": "A crown in ",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_398.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/0_20250622_111635_415.jpg",
+        "prompt": " on the table",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/2_20250622_111635_421.jpg",
+        "prompt": " with a mountain in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/4_20250622_111635_426.jpg",
+        "prompt": "A bunny in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/3_20250622_111635_431.jpg",
+        "prompt": "A chair in ",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/1_20250622_111635_435.jpg",
+        "prompt": " floating on the water",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_440.jpg",
+        "prompt": " with a tree and autumn leaves in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_446.jpg",
+        "prompt": "A cat in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/3_20250622_111635_450.jpg",
+        "prompt": "A deer in",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_453.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/3_20250622_111635_470.jpg",
+        "prompt": " in snow",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_476.jpg",
+        "prompt": " made of crystal",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_481.jpg",
+        "prompt": "A bunny in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_486.jpg",
+        "prompt": "A piano in ",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/3_20250622_111635_490.jpg",
+        "prompt": " in jungle",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/8_20250622_111635_496.jpg",
+        "prompt": " on the beach",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_501.jpg",
+        "prompt": "A dog in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_505.jpg",
+        "prompt": "A flower in ",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_509.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/0_20250622_111635_528.jpg",
+        "prompt": " in snow",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_534.jpg",
+        "prompt": " on table",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/3_20250622_111635_540.jpg",
+        "prompt": "A capybara in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/5_20250622_111635_545.jpg",
+        "prompt": "A dragon in ",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/7_20250622_111635_551.jpg",
+        "prompt": " in downtown",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_560.jpg",
+        "prompt": " with a wheat field in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_566.jpg",
+        "prompt": "A deer in  ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_570.jpg",
+        "prompt": "A dog in ",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_576.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/2_20250622_111635_596.jpg",
+        "prompt": " in swimming pool",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/1_20250622_111635_601.jpg",
+        "prompt": " wearing santa hat",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/5_20250622_111635_607.jpg",
+        "prompt": "A dragon in  ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_613.jpg",
+        "prompt": "A piano in ",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/7_20250622_111635_619.jpg",
+        "prompt": " with a mountain in the background",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/4_20250622_111635_624.jpg",
+        "prompt": " as sticker",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/1_20250622_111635_630.jpg",
+        "prompt": "A chair in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/2_20250622_111635_636.jpg",
+        "prompt": "A man in ",
+        "type": "style"
+      }
+    ]
+  },
+  {
+    "ref": {
+      "image_path": "temp_images/00_20250622_111635_642.jpg",
+      "prompt": "Prompt for the reference image 3",
+      "type": "content"
+    },
+    "switti": [
+      {
+        "image_path": "temp_images/4_20250622_111635_659.jpg",
+        "prompt": " on the beach",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/5_20250622_111635_665.jpg",
+        "prompt": " in desert",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/9_20250622_111635_670.jpg",
+        "prompt": "A truck in  ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/6_20250622_111635_674.jpg",
+        "prompt": "A flower in ",
+        "type": "style"
+      }
+    ],
+    "infinity": [
+      {
+        "image_path": "temp_images/0_20250622_111635_678.jpg",
+        "prompt": "",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/0_20250622_111635_685.jpg",
+        "prompt": " floating in space",
+        "type": "content"
+      },
+      {
+        "image_path": "temp_images/1_20250622_111635_690.jpg",
+        "prompt": "A dinosaur in ",
+        "type": "style"
+      },
+      {
+        "image_path": "temp_images/5_20250622_111635_694.jpg",
+        "prompt": "A laptop in ",
+        "type": "style"
+      }
+    ]
+  }
+]

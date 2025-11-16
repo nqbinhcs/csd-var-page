@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="CSD-VAR: Content-Style Decomposition in Visual Autoregressive Models"
+    />
+    <meta
+      name="keywords"
+      content="depth, estimation, monocular, scene, reconstruction"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      CSD-VAR: Content-Style Decomposition in Visual Autoregressive Models
+    </title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./css/bulma.min.css" />
+    <link rel="stylesheet" href="./css/bulma-carousel.min.css" />
+    <link rel="stylesheet" href="./css/bulma-slider.min.css" />
+    <link rel="stylesheet" href="./css/twentytwenty.css" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="icon" href="./images/favicon.svg" />
+
+    <!-- Add AOS library for scroll animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <!-- Add modern CSS effects -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <script src="./js/jquery-3.2.1.min.js"></script>
+    <script src="./js/jquery.event.move.js"></script>
+    <script src="./js/jquery.twentytwenty.js"></script>
+    <script src="./js/bulma-carousel.min.js"></script>
+    <script src="./js/bulma-slider.min.js"></script>
+    <script src="./js/fontawesome.all.min.js"></script>
+
+    <!-- Add AOS library script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Add particles.js for background effect -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <!--MathJax-->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+        svg: {
+          fontCache: "global",
+        },
+      };
+    </script>
+    <script
+      type="text/javascript"
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Add particles container -->
+    <div
+      id="particles-js"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      "
+    ></div>
+
+    <!-- Sidebar Navigation will be injected by JS if enabled -->
+    <script>
+      fetch("config_web.json?v=" + Date.now())
+        .then((r) => r.json())
+        .then((cfg) => {
+          if (cfg.enable_panel) {
+            const sidebar = document.createElement("aside");
+            sidebar.id = "sidebar-nav";
+            sidebar.style = `
+              position: fixed;
+              top: 32px;
+              left: 32px;
+              width: 60px;
+              height: auto;
+              background: rgba(255,255,255,0.92);
+              box-shadow: 0 4px 24px 0 rgba(60,60,60,0.13);
+              border-radius: 18px;
+              z-index: 100;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              padding: 12px 0 12px 0;
+              gap: 1em;
+              transition: background 0.2s;
+            `;
+            sidebar.innerHTML = `
+              <nav style="width: 100%">
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 1em;">
+                  <li>
+                    <a href="#showcases" style="color: #222; text-decoration: none; font-size: 1.2em; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; transition: background 0.2s;" onmouseover="this.style.background='rgba(240,244,250,0.95)'" onmouseout="this.style.background='none'">
+                      <i class="fas fa-database"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#approach" style="color: #222; text-decoration: none; font-size: 1.2em; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; transition: background 0.2s;" onmouseover="this.style.background='rgba(240,244,250,0.95)'" onmouseout="this.style.background='none'">
+                      <i class="fas fa-cogs"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#qualitative-results" style="color: #222; text-decoration: none; font-size: 1.2em; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; transition: background 0.2s;" onmouseover="this.style.background='rgba(240,244,250,0.95)'" onmouseout="this.style.background='none'">
+                      <i class="fas fa-image"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#gallery" style="color: #222; text-decoration: none; font-size: 1.2em; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; transition: background 0.2s;" onmouseover="this.style.background='rgba(240,244,250,0.95)'" onmouseout="this.style.background='none'">
+                      <i class="fas fa-th"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#BibTeX" style="color: #222; text-decoration: none; font-size: 1.2em; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; transition: background 0.2s;" onmouseover="this.style.background='rgba(240,244,250,0.95)'" onmouseout="this.style.background='none'">
+                      <i class="fas fa-envelope"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            `;
+            document.body.appendChild(sidebar);
+          }
+        });
+    </script>
+
+    <!-- Add body margin for sidebar offset -->
+    <style>
+      #sidebar-nav {
+        pointer-events: auto;
+      }
+      #sidebar-nav:hover {
+        background: rgba(255, 255, 255, 0.98) !important;
+      }
+      @media (max-width: 900px) {
+        #sidebar-nav {
+          display: none;
+        }
+      }
+    </style>
+
+    <script>
+      fetch("config_web.json?v=" + Date.now())
+        .then((r) => r.json())
+        .then((cfg) => {
+          // Remove margin-left logic for floating panel
+          document.body.style.marginLeft = "0";
+        });
+    </script>
+
+    <section class="hero">
+      <div class="hero-body" style="position: relative; padding: 1rem 1.5rem">
+        <div class="video-bg-container">
+          <video autoplay loop muted playsinline class="video-bg">
+            <source src="images/background.mp4" type="video/mp4" />
+          </video>
+          <div class="video-bg-overlay"></div>
+        </div>
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1
+                id="main-title"
+                class="title is-2 publication-title animate__animated animate__fadeIn"
+              >
+                Content-Style Decomposition in Visual Autoregressive Models
+              </h1>
+              <script>
+                fetch("config_web.json?v=" + Date.now())
+                  .then((r) => r.json())
+                  .then((cfg) => {
+                    var title = document.getElementById("main-title");
+                    // if (!cfg.enable_panel && title) {
+                    //   title.innerHTML =
+                    //     '<span class="csd-var-gradient">CSD-VAR</span>: Content-Style Decomposition in Visual Autoregressive Models';
+                    // } else if (title) {
+                    //   title.innerHTML =
+                    //     "Content-Style Decomposition in Visual Autoregressive Models";
+                    // }
+                    title.innerHTML =
+                      '<span class="csd-var-gradient">CSD-VAR</span>: Content-Style Decomposition in<br>Visual Autoregressive Models';
+                  });
+              </script>
+              <h3
+                class="title has-text-centered animate__animated"
+                style="font-style: italic; color: #666666"
+              >
+                ICCV 2025, Honolulu, Hawai'i 🌺
+              </h3>
+              <div class="is-size-5 publication-authors author-list">
+                <span class="author-block">
+                  <a
+                    href="https://nqbinhcs.github.io/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Quang-Binh Nguyen</a
+                  >
+                </span>
+                <span class="author-block">
+                  <a
+                    href="https://minhluu2911.github.io/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Minh Luu</a
+                  >
+                  <!-- <sup>*</sup>, -->
+                </span>
+                <span class="author-block">
+                  <a
+                    href="https://quang-ngh.github.io/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Quang Nguyen</a
+                  >
+                  <!-- <sup>*</sup>, -->
+                </span>
+                <span class="author-block">
+                  <a
+                    href="https://scholar.google.com/citations?user=FYZ5ODQAAAAJ&hl=en"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Anh Tran</a
+                  >
+                </span>
+                <span class="author-block">
+                  <a
+                    href="https://www.khoinguyen.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Khoi Nguyen</a
+                  >
+                </span>
+              </div>
+              <div class="has-text-centered" style="margin-top: 1.5em">
+                <img
+                  src="images/Qualcomm-Logo.svg"
+                  alt="Qualcomm Logo"
+                  style="height: 40px; width: auto"
+                />
+              </div>
+              <div
+                class="publication-links"
+                style="
+                  margin: 1.5em 0 0 0;
+                  display: flex;
+                  justify-content: center;
+                  gap: 1.2em;
+                  flex-wrap: wrap;
+                "
+              >
+                <a
+                  class="pub-btn pub-btn-arxiv"
+                  href="https://arxiv.org/abs/your_arxiv_id"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <i class="fas fa-file-pdf"></i> arXiv
+                </a>
+                <!-- <a class="pub-btn pub-btn-hf" href="#" style="background: #000">
+                  <span style="font-size: 1.3em; margin-right: 0.3em">🤗</span>
+                  HuggingFace Paper
+                </a> -->
+                <a
+                  class="pub-btn pub-btn-code"
+                  href="#"
+                  style="pointer-events: none; opacity: 0.6"
+                >
+                  <i class="fab fa-github"></i> Code (Coming Soon)
+                </a>
+                <a class="pub-btn pub-btn-bibtex" href="#BibTeX">
+                  <i class="fas fa-quote-right"></i> BibTeX
+                </a>
+              </div>
+              <!-- <div class="is-size-5 publication-authors">
+                <span class="author-block"> Qualcomm AI Research </span>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero teaser" id="teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body">
+          <!-- Begin Sketch Carousel Demo -->
+          <div class="sketch-carousel-outer" style="margin-top: 2em">
+            <div
+              class="sketch-carousel-container"
+              id="sketch-carousel-container"
+            >
+              <button
+                class="sketch-arrow left"
+                id="sketch-prev"
+                style="display: none"
+              >
+                &#8592;
+              </button>
+              <div class="sketch-carousel-inner">
+                <div class="sketch-carousel-headings">
+                  <div
+                    class="sketch-carousel-heading sketch-carousel-heading-content"
+                  >
+                    Content
+                  </div>
+
+                  <div
+                    class="sketch-carousel-heading sketch-carousel-heading-style"
+                  >
+                    Style
+                  </div>
+                </div>
+                <div class="sketch-carousel-images-row">
+                  <div class="sketch-card" id="sketch-card-left">
+                    <div class="sketch-label" id="sketch-label-left"></div>
+                    <div class="sketch-keys" id="sketch-keys-left"></div>
+                    <img
+                      class="sketch-img"
+                      id="sketch-img-left"
+                      src=""
+                      alt="demo left"
+                    />
+                  </div>
+                  <div class="sketch-card" id="sketch-card-center">
+                    <div
+                      class="sketch-label center"
+                      id="sketch-label-center"
+                      style="
+                        font-family: 'Pacifico', cursive, serif;
+                        font-size: 2.6em;
+                        font-style: italic;
+                        font-weight: 400;
+                      "
+                    ></div>
+                    <img
+                      class="sketch-img"
+                      id="sketch-img-center"
+                      src=""
+                      alt="demo center"
+                    />
+                    <button id="decompose-btn" class="decompose-btn">
+                      Decompose
+                    </button>
+                  </div>
+                  <div class="sketch-card" id="sketch-card-right">
+                    <div class="sketch-label" id="sketch-label-right"></div>
+                    <div class="sketch-keys" id="sketch-keys-right"></div>
+                    <img
+                      class="sketch-img"
+                      id="sketch-img-right"
+                      src=""
+                      alt="demo right"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="sketch-arrow right"
+                id="sketch-next"
+                style="display: none"
+              >
+                &#8594;
+              </button>
+            </div>
+          </div>
+          <!-- End Sketch Carousel Demo -->
+        </div>
+      </div>
+    </section>
+
+    <!-- <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="column has-text-centered">
+            <h2 class="title has-text-centered is-4">
+              Audio Presentation (by NotebookLM)
+            </h2>
+            <audio controls>
+              <source
+                src="images/CSD-VAR_ High-Fidelity Zero-Shot Metric Depth Estimation.wav"
+                type="audio/mpeg"
+              />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- Teaser video-->
+    <!-- <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body">
+          <h2 class="title has-text-centered is-3">Video Demonstration</h2>
+          <video poster="" id="tree" autoplay controls muted loop height="100%">
+            
+            <source src="images/democlip.mp4" type="video/mp4" />
+          </video>
+          <h2 class="subtitle has-text-centered">
+            CSD-VAR can enhance the high-frequency details of a metric depth
+            estimator, allowing for better point-cloud reconstruction. We use
+            gradio in this demonstration.
+          </h2>
+        </div>
+      </div>
+    </section> -->
+    <!-- End teaser video -->
+
+    <section class="section pt-0" id="abstract-section" style="margin-top: 2em">
+      <div class="abstract-section-custom">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-left">
+          <p>
+            Disentangling content and style from a single image, known as
+            content-style decomposition (CSD), enables recontextualization of
+            extracted content and stylization of extracted styles, offering
+            greater creative flexibility in visual synthesis. While recent
+            personalization methods have explored explicit content-style
+            decomposition, they remain tailored for diffusion models. Meanwhile,
+            Visual Autoregressive Modeling (VAR) has emerged as a promising
+            alternative with a next-scale prediction paradigm, achieving
+            performance on par with diffusion models. In this paper, we explore
+            VAR as a generative framework for CSD, leveraging its scale-wise
+            generation process for improved disentanglement. To this end, we
+            propose CSD-VAR, a novel method that introduces three key
+            innovations:
+            <b>(1) a scale-aware alternating optimization strategy</b> that
+            aligns content and style representation with their respective scales
+            to enhance separation,
+            <b>(2) an SVD-based rectification method</b> to mitigate content
+            leakage into style representations, and
+            <b>(3) Augmented Key-Value (K-V) memory</b> enhancing content
+            identity preservation. To benchmark this task, we introduce CSD-100,
+            a dataset specifically designed for content-style decomposition,
+            featuring diverse subjects rendered in various artistic styles.
+            Experiments demonstrate that CSD-VAR outperforms prior approaches,
+            achieving superior content preservation and stylization fidelity.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pt-0 pb-4">
+      <div class="container approach-wider">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" style="color: #7c5c45; text-align: left">
+              CSD-100 Benchmark Dataset
+            </h2>
+
+            <div class="content has-text-left">
+              <p>
+                To standardize the evaluation of the content-style decomposition
+                (CSD) task, we introduce <b>CSD-100</b>, a dataset of 100 images
+                designed to capture diverse content and styles for comprehensive
+                benchmark.
+              </p>
+            </div>
+
+            <img
+              id="csd_100"
+              width="100%"
+              src="images/our_csd_100.png"
+              alt="CSD-100 Dataset"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="approach">
+      <div class="container approach-wider">
+        <!-- Method. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2
+              class="title is-3"
+              id="approach"
+              style="color: #7c5c45; text-align: left"
+            >
+              Method Overview
+            </h2>
+            <div class="content has-text-left">
+              <!-- <h4
+                class="subtitle is-4"
+                style="font-size: 1.2em; margin-top: 1.5em"
+              >
+                1. Scale-aware Alternating Optimization Strategy
+              </h4> -->
+
+              <p>
+                Given an input image $I^*$ containing a subject $y_c$ in style
+                $y_s$, our objective is to disentangle its style and content
+                into two distinct representations, enabling the generation of
+                separate images: $I_c$, which accurately preserves the content
+                of $I^*$, and $I_s$, which effectively captures its style. To
+                achieve this, we explore the use of Visual Autoregressive Models
+                (VAR) for this task.
+              </p>
+
+              <img
+                id="method_overview"
+                width="100%"
+                src="images/method/overview_csdvar_with_analysis.png"
+                alt="CSD-VAR Overview"
+              />
+
+              <!-- <h4
+                class="subtitle is-4"
+                style="font-size: 1.2em; margin-top: 1.5em"
+              >
+                2. SVD-based Style Embedding Rectification
+              </h4>
+
+              <p>
+                To mitigate the content leakage issue, we propose an SVD-based
+                rectification method that refines the original style embedding
+                $e_s = \text{CLIP}(y_s)$ by removing content-related information
+                during training.
+              </p>
+
+              <img
+                id="rectify_style"
+                width="100%"
+                src="images/method/rectify_style.png"
+                alt="SVD-based Style Embedding Rectification"
+              />
+
+              <h4
+                class="subtitle is-4"
+                style="font-size: 1.2em; margin-top: 1.5em"
+              >
+                3. Augmented Key-Value Memory
+              </h4>
+              <p>
+                With the two improvements above, content and style embeddings
+                can be effectively separated. However, for complex content or
+                style concepts, textual embeddings alone may be insufficient,
+                leading to under-captured representations. To address, we
+                introduce augmented K-V memory to enhance the information
+                captured by textual embeddings. Specifically, we augment several
+                blocks in the autoregressive transformer with $O$ pairs of K-V
+                memories, inserted before the self-attention layers. These K-V
+                memories, denoted as $\tilde{K}$ and $\tilde{V}$, are added just
+                before the $K, V$. Formally:
+              </p>
+
+              <div style="text-align: center">
+                <p>
+                  $ \operatorname{Attn}(Q, K, V; \tilde{K}, \tilde{V}) =
+                  \operatorname{Attn} \left( Q, \begin{bmatrix} \tilde{K} \\ K
+                  \end{bmatrix}, \begin{bmatrix} \tilde{V} \\ V \end{bmatrix}
+                  \right). $
+                </p>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <!--/ Method. -->
+      </div>
+    </section>
+
+    <!-- Qualitative Results -->
+    <section class="section" id="qualitative-results">
+      <div class="container approach-wider">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2
+              class="title is-3"
+              id="qualitative-results"
+              style="color: #7c5c45; text-align: left"
+            >
+              📈 Qualitative Results on CSD-100
+            </h2>
+            <div
+              id="qualitative-carousel-wrapper"
+              style="position: relative; width: 100%; margin: 0 auto"
+            >
+              <button
+                id="qual-carousel-prev"
+                class="slider-navigation-previous"
+                style="
+                  position: absolute;
+                  left: 0;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  z-index: 2;
+                  background: #fff;
+                  border-radius: 50%;
+                  border: none;
+                  width: 48px;
+                  height: 48px;
+                  font-size: 2em;
+                  box-shadow: 0 2px 8px #0001;
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                &#8592;
+              </button>
+              <div id="qualitative-carousel" class="qual-carousel-immersive">
+                <div id="qual-carousel-track"></div>
+              </div>
+              <button
+                id="qual-carousel-next"
+                class="slider-navigation-next"
+                style="
+                  position: absolute;
+                  right: 0;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  z-index: 2;
+                  background: #fff;
+                  border-radius: 50%;
+                  border: none;
+                  width: 48px;
+                  height: 48px;
+                  font-size: 2em;
+                  box-shadow: 0 2px 8px #0001;
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                &#8594;
+              </button>
+              <div
+                id="qual-carousel-indicators"
+                style="text-align: center; margin-top: 18px"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section" id="gallery">
+      <div class="container approach-wider">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" style="color: #7c5c45; text-align: left">
+              🖼️ More Showcases on CSD-100
+            </h2>
+            <div class="content has-text-left">
+              <p>
+                Demonstrating the universality of our method, we currently
+                support two SOTA scale-wise autoregressive T2I models:
+                <a
+                  href="https://arxiv.org/abs/2412.01819"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Switti</a
+                >
+                and
+                <a
+                  href="https://arxiv.org/html/2412.04431v1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Infinity</a
+                >.
+              </p>
+            </div>
+            <div class="gallery-scroll-wrapper">
+              <div id="gallery-section"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      $(window).on("load", function () {
+        // Initialize AOS
+        AOS.init({
+          once: true,
+          offset: 100,
+          duration: 800,
+          easing: "ease-in-out",
+        });
+
+        // Initialize particles.js
+        particlesJS("particles-js", {
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#ffffff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5, random: false },
+            size: { value: 3, random: true },
+            line_linked: {
+              enable: true,
+              distance: 150,
+              color: "#ffffff",
+              opacity: 0.4,
+              width: 1,
+            },
+            move: {
+              enable: true,
+              speed: 2,
+              direction: "none",
+              random: false,
+              straight: false,
+              out_mode: "out",
+              bounce: false,
+            },
+          },
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onhover: { enable: true, mode: "grab" },
+              onclick: { enable: true, mode: "push" },
+              resize: true,
+            },
+          },
+          retina_detect: true,
+        });
+
+        bulmaCarousel.attach("#results-carousel-horizontal", {
+          slidesToScroll: 1,
+          slidesToShow: 3,
+          loop: true,
+          autoplay: true,
+        });
+
+        bulmaCarousel.attach("#results-carousel-vertical", {
+          slidesToScroll: 1,
+          slidesToShow: 5,
+          loop: true,
+          autoplay: true,
+        });
+
+        bulmaCarousel.attach("#results-carousel-testimonials", {
+          slidesToScroll: 1,
+          slidesToShow: 3,
+          loop: true,
+          autoplay: true,
+          breakpoints: [
+            {
+              changePoint: 50 + 260 * 2,
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              loop: true,
+              autoplay: true,
+            },
+            {
+              changePoint: 50 + 260 * 3,
+              slidesToShow: 2,
+              slidesToScroll: 1,
+              loop: true,
+              autoplay: true,
+            },
+            {
+              changePoint: 50 + 260 * 4,
+              slidesToShow: 3,
+              slidesToScroll: 1,
+              loop: true,
+              autoplay: true,
+            },
+          ],
+        });
+
+        $(".twentytwenty-container-top").twentytwenty({
+          before_label: "Input",
+          after_label: "Ours",
+          default_offset_pct: 0.75,
+        });
+
+        $(".twentytwenty-container-bottom").twentytwenty({
+          before_label: "UniDepth",
+          after_label: "Ours",
+          default_offset_pct: 0.5,
+        });
+
+        $(".results-carousel").css({
+          "max-height": "2000px",
+          visibility: "visible",
+        });
+      });
+
+      // Dynamic Sketch Carousel Demo Logic
+      let sketchExamples = [];
+      let sketchIdx = 0;
+      let leftKey = null,
+        rightKey = null;
+      let webConfig = { glowing_border: true };
+
+      function applyGlowingBorderSetting() {
+        const decomposeBtn = document.getElementById("decompose-btn");
+        if (!decomposeBtn) return;
+        decomposeBtn.classList.remove("glow"); // Remove old glow if present
+        if (webConfig.glowing_border) {
+          decomposeBtn.classList.add("sheer-light");
+        } else {
+          decomposeBtn.classList.remove("sheer-light");
+        }
+      }
+
+      function renderKeys(keys, containerId, onClick, selectedKey) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+        keys.forEach((key) => {
+          const btn = document.createElement("button");
+          btn.textContent = key;
+          btn.className =
+            "sketch-key-btn" + (key === selectedKey ? " selected" : "");
+          btn.onclick = () => onClick(key);
+          container.appendChild(btn);
+        });
+      }
+      function renderLabelWithKeys(label, keys, selectedKey, onClick) {
+        if (!label) return "";
+        // Replace {} with keys inline
+        const keyHtml = keys
+          .map(
+            (key) =>
+              `<span class="sketch-key-span${
+                key === selectedKey ? " bold" : " faded"
+              }" style="cursor:pointer" onclick="window._sketchKeyClick && window._sketchKeyClick('${key}')">${key}</span>`
+          )
+          .join(", ");
+        return label.replace("{}", keyHtml);
+      }
+      // Expose click handler globally for inline onclick
+      window._sketchKeyClick = function (key) {
+        // Determine if left or right
+        const ex = sketchExamples[sketchIdx];
+        if (Object.keys(ex.image_left).includes(key)) {
+          leftKey = key;
+        } else if (Object.keys(ex.image_right).includes(key)) {
+          rightKey = key;
+        }
+        updateSketchCarousel();
+      };
+      function updateSketchCarousel() {
+        if (!sketchExamples.length) return;
+        const ex = sketchExamples[sketchIdx];
+        // Left keys
+        const leftKeys = Object.keys(ex.image_left);
+        if (!leftKey || !leftKeys.includes(leftKey)) leftKey = leftKeys[0];
+        // Right keys
+        const rightKeys = Object.keys(ex.image_right);
+        if (!rightKey || !rightKeys.includes(rightKey)) rightKey = rightKeys[0];
+        // Set labels with keys inline and double quotes for left/right
+        document.getElementById("sketch-label-left").innerHTML =
+          "&quot;" +
+          renderLabelWithKeys(ex.label_left, leftKeys, leftKey) +
+          "&quot;";
+        document.getElementById("sketch-label-center").innerHTML =
+          ex.label_center;
+        document.getElementById("sketch-label-right").innerHTML =
+          "&quot;" +
+          renderLabelWithKeys(ex.label_right, rightKeys, rightKey) +
+          "&quot;";
+        // Set images
+        document.getElementById("sketch-img-left").src = ex.image_left[leftKey];
+        document.getElementById("sketch-img-center").src = ex.image_center_path;
+        document.getElementById("sketch-img-right").src =
+          ex.image_right[rightKey];
+        // Apply glowing border setting
+        applyGlowingBorderSetting();
+      }
+      document.getElementById("sketch-prev").onclick = function () {
+        if (!sketchExamples.length) return;
+        sketchIdx =
+          (sketchIdx - 1 + sketchExamples.length) % sketchExamples.length;
+        updateSketchCarousel();
+      };
+      document.getElementById("sketch-next").onclick = function () {
+        if (!sketchExamples.length) return;
+        sketchIdx = (sketchIdx + 1) % sketchExamples.length;
+        updateSketchCarousel();
+      };
+      // Debug: print data loaded from data.json
+      function debugLog(msg, obj) {
+        console.log(msg, JSON.parse(JSON.stringify(obj)));
+      }
+      // Fetch config first, then data
+      fetch("config_web.json?v=" + Date.now())
+        .then((r) => r.json())
+        .then((cfg) => {
+          webConfig = cfg || webConfig;
+          // Apply initial UI based on config
+          const container = document.getElementById(
+            "sketch-carousel-container"
+          );
+          const decomposeBtn = document.getElementById("decompose-btn");
+          const prevArrow = document.getElementById("sketch-prev");
+          const nextArrow = document.getElementById("sketch-next");
+          // print webConfig
+          console.log(webConfig);
+          if (webConfig.use_decompose_btn) {
+            container.classList.remove("decomposed");
+            container.classList.remove("no-animate");
+            if (decomposeBtn) decomposeBtn.style.display = "block";
+            if (prevArrow) prevArrow.style.display = "none";
+            if (nextArrow) nextArrow.style.display = "none";
+          } else {
+            container.classList.add("decomposed");
+            container.classList.add("no-animate");
+            if (decomposeBtn) decomposeBtn.style.display = "none";
+            if (prevArrow) prevArrow.style.display = "block";
+            if (nextArrow) nextArrow.style.display = "block";
+            // Remove animating class if present
+            container.classList.remove("animating");
+          }
+          applyGlowingBorderSetting();
+        })
+        .finally(() => {
+          fetch("data_choose_processed.json?v=" + Date.now())
+            .then((r) => r.json())
+            .then((data) => {
+              debugLog("Loaded data.json:", data);
+              sketchExamples = data;
+              sketchIdx = 0;
+              updateSketchCarousel();
+            });
+        });
+
+      // Add setLabelHtml function for label rendering
+      function setLabelHtml(el, label) {
+        // Simple parser: <b>...</b> for bold, <faded>...</faded> for faded
+        if (!label) {
+          el.innerHTML = "";
+          return;
+        }
+        let html = label
+          .replace(/<b>(.*?)<\/b>/g, '<span class="bold">$1</span>')
+          .replace(/<faded>(.*?)<\/faded>/g, '<span class="faded">$1</span>');
+        el.innerHTML = html;
+      }
+
+      // Add Decompose animation logic
+      (function () {
+        const BLANK_IMG =
+          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
+        const ANIMATION_DURATION = 500; // ms
+        var decomposeBtn = document.getElementById("decompose-btn");
+        if (decomposeBtn) {
+          decomposeBtn.onclick = function () {
+            // Only allow animation if use_decompose_btn is true
+            if (
+              typeof webConfig !== "undefined" &&
+              webConfig.use_decompose_btn === false
+            )
+              return;
+            const container = document.getElementById(
+              "sketch-carousel-container"
+            );
+            const leftImg = document.getElementById("sketch-img-left");
+            const rightImg = document.getElementById("sketch-img-right");
+            // Save real srcs
+            const realLeft = leftImg.getAttribute("src");
+            const realRight = rightImg.getAttribute("src");
+            // Set blank images
+            leftImg.setAttribute("src", BLANK_IMG);
+            rightImg.setAttribute("src", BLANK_IMG);
+            // Add animating class
+            container.classList.add("animating");
+            // Trigger decomposed state
+            container.classList.add("decomposed");
+            // Hide the decompose button immediately
+            decomposeBtn.style.display = "none";
+            // After animation, restore real images and remove animating class
+            setTimeout(() => {
+              leftImg.setAttribute("src", realLeft);
+              rightImg.setAttribute("src", realRight);
+              container.classList.remove("animating");
+            }, ANIMATION_DURATION);
+            // set display appear for left and right arrows
+            document.getElementById("sketch-prev").style.display = "block";
+            document.getElementById("sketch-next").style.display = "block";
+          };
+        }
+        // On load, hide left/right cards if using decompose btn, else show full
+        if (
+          typeof webConfig !== "undefined" &&
+          webConfig.use_decompose_btn === false
+        ) {
+          document
+            .getElementById("sketch-carousel-container")
+            .classList.add("decomposed");
+          if (decomposeBtn) decomposeBtn.style.display = "none";
+          document.getElementById("sketch-prev").style.display = "block";
+          document.getElementById("sketch-next").style.display = "block";
+          document
+            .getElementById("sketch-carousel-container")
+            .classList.remove("animating");
+        } else {
+          document
+            .getElementById("sketch-carousel-container")
+            .classList.remove("decomposed");
+          if (decomposeBtn) decomposeBtn.style.display = "block";
+          document.getElementById("sketch-prev").style.display = "none";
+          document.getElementById("sketch-next").style.display = "none";
+        }
+      })();
+
+      // Helper to trigger decompose programmatically
+      function triggerDecomposeIfNeeded() {
+        const container = document.getElementById("sketch-carousel-container");
+        const decomposeBtn = document.getElementById("decompose-btn");
+        if (
+          typeof webConfig !== "undefined" &&
+          webConfig.use_decompose_btn &&
+          container &&
+          !container.classList.contains("decomposed")
+        ) {
+          if (decomposeBtn && decomposeBtn.onclick) {
+            decomposeBtn.onclick();
+          }
+        }
+      }
+      // Listen for scroll to trigger decompose
+      function setupDecomposeOnScroll() {
+        let triggered = false;
+        function onScroll() {
+          if (!triggered && window.scrollY > 10) {
+            triggerDecomposeIfNeeded();
+            triggered = true;
+            window.removeEventListener("scroll", onScroll);
+          }
+        }
+        window.addEventListener("scroll", onScroll);
+      }
+      // Call this after config is loaded and DOM is ready
+      setupDecomposeOnScroll();
+
+      // Render Gallery Section from data_gallery.json
+      fetch("data_gallery_choose_processed.json?v=" + Date.now())
+        .then((r) => r.json())
+        .then((galleryData) => {
+          const galleryDiv = document.getElementById("gallery-section");
+          if (!galleryDiv) return;
+          let html = '<div class="gallery-table">';
+          galleryData.forEach((row) => {
+            html += '<div class="gallery-row">';
+            // Ref (small, centered vertically)
+            html += `<div class="gallery-ref-col">
+              <div class="gallery-img-container gallery-img-hover">
+                <img class="gallery-img-single" src="${row.ref.image_path}" alt="Ref" />
+              </div>
+              <div class="ref-text">Ref</div>
+            </div>`;
+            // Switti 2x2 grid
+            html += '<div class="gallery-grid-2x2">';
+            (row.switti || []).slice(0, 4).forEach((imgObj, idx) => {
+              html += `<div class="gallery-img-container gallery-img-hover">
+                <img class="gallery-img-large ${
+                  imgObj.type === "content"
+                    ? "gallery-img-border-content"
+                    : "gallery-img-border-style"
+                }" src="${imgObj.image_path}" alt="Switti ${idx + 1}" />
+                <div class="gallery-prompt-overlay ${
+                  imgObj.type === "content"
+                    ? "overlay-content"
+                    : "overlay-style"
+                }">${imgObj.prompt || ""}</div>
+                <div class="gallery-label-box switti-label">Switti</div>
+              </div>`;
+            });
+            html += "</div>";
+            // Infinity 2x2 grid
+            html += '<div class="gallery-grid-2x2">';
+            (row.infinity || []).slice(0, 4).forEach((imgObj, idx) => {
+              html += `<div class="gallery-img-container gallery-img-hover">
+                <img class="gallery-img-large ${
+                  imgObj.type === "content"
+                    ? "gallery-img-border-content"
+                    : "gallery-img-border-style"
+                }" src="${imgObj.image_path}" alt="Infinity ${idx + 1}" />
+                <div class="gallery-prompt-overlay ${
+                  imgObj.type === "content"
+                    ? "overlay-content"
+                    : "overlay-style"
+                }">${imgObj.prompt || ""}</div>
+                <div class="gallery-label-box infinity-label">Infinity</div>
+              </div>`;
+            });
+            html += "</div>";
+            html += "</div>";
+          });
+          html += "</div>";
+          galleryDiv.innerHTML = html;
+        });
+
+      // Qualitative Results Carousel Logic with Sliding Animation
+      const qualImages = [
+        "images/qualitative_comparisons/qualitative_comparision-Comparision_1.jpg",
+        "images/qualitative_comparisons/qualitative_comparision-Comparision_2.jpg",
+        "images/qualitative_comparisons/qualitative_comparision-Comparision_3.jpg",
+        "images/qualitative_comparisons/qualitative_comparision-Comparision_4.jpg",
+        "images/qualitative_comparisons/qualitative_comparision-Comparision_5.jpg",
+        "images/qualitative_comparisons/qualitative_comparision-Comparision_6.jpg",
+      ];
+      let qualIdx = 0;
+      let qualInterval = null;
+      function renderQualCarouselTrack() {
+        const track = document.getElementById("qual-carousel-track");
+        if (!track) return;
+        // Only render images once
+        if (!track.hasChildNodes()) {
+          qualImages.forEach((src, i) => {
+            const img = document.createElement("img");
+            img.src = src;
+            img.className = "qual-carousel-img";
+            img.alt = `Qualitative Comparison ${i + 1}`;
+            track.appendChild(img);
+          });
+        }
+        // Set transform to slide
+        track.style.transform = `translateX(-${qualIdx * 100}%)`;
+        // Indicators
+        const indicators = document.getElementById("qual-carousel-indicators");
+        if (indicators) {
+          indicators.innerHTML = qualImages
+            .map(
+              (_, i) =>
+                `<span style="display:inline-block; width:14px; height:14px; margin:0 4px; border-radius:50%; background:${
+                  i === qualIdx ? "#7c5c45" : "#ddd"
+                }; box-shadow:0 1px 4px #0001; cursor:pointer;" onclick="window.setQualCarouselIdx(${i})"></span>`
+            )
+            .join("");
+        }
+      }
+      window.setQualCarouselIdx = function (idx) {
+        qualIdx = idx;
+        renderQualCarouselTrack();
+        resetQualCarouselInterval();
+      };
+      function nextQualCarousel() {
+        qualIdx = (qualIdx + 1) % qualImages.length;
+        renderQualCarouselTrack();
+      }
+      function prevQualCarousel() {
+        qualIdx = (qualIdx - 1 + qualImages.length) % qualImages.length;
+        renderQualCarouselTrack();
+      }
+      function resetQualCarouselInterval() {
+        if (qualInterval) clearInterval(qualInterval);
+        qualInterval = setInterval(() => {
+          nextQualCarousel();
+        }, 3500);
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        renderQualCarouselTrack();
+        resetQualCarouselInterval();
+        document.getElementById("qual-carousel-next").onclick = function () {
+          nextQualCarousel();
+          resetQualCarouselInterval();
+        };
+        document.getElementById("qual-carousel-prev").onclick = function () {
+          prevQualCarousel();
+          resetQualCarouselInterval();
+        };
+      });
+    </script>
+
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <h2 class="title">Citation</h2>
+        <p style="font-size: 1.1em; margin-bottom: 1.2em">
+          Feel free to contact Quang-Binh Nguyen at
+          <a href="mailto:binhnguy@qti.qualcomm.com"
+            >binhnq@qti.qualcomm.com</a
+          >
+          for any question. If you find this work useful, please consider
+          citing:
+        </p>
+        <pre class="selectable"><code>
+      @InProceedings{Nguyen_2025_ICCV,
+        author    = {Nguyen, Quang-Binh and Luu, Minh and Nguyen, Quang and Tran, Anh and Nguyen, Khoi},
+        title     = {CSD-VAR: Content-Style Decomposition in Visual Autoregressive Models},
+        booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+        month     = {October},
+        year      = {2025},
+        pages     = {17013-17023}
+      }
+  </code></pre>
+      </div>
+    </section>
+
+    <footer class="footer pt-4 pb-0">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content">
+              <p>
+                Website template based on
+                <a href="marigoldmonodepth.github.io"> Marigold </a>, which is
+                based on
+                <a href="https://github.com/nerfies/nerfies.github.io">
+                  Nerfies
+                </a>
+                and licensed under
+                <a
+                  rel="license"
+                  href="http://creativecommons.org/licenses/by-sa/4.0/"
+                >
+                  CC-BY-SA-4.0 </a
+                >.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      /* Add smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Enhance section transitions */
+      .section {
+        transition: all 0.3s ease-in-out;
+      }
+
+      /* Add hover effects to images */
+      .twentytwenty-container img {
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .twentytwenty-container:hover img {
+        transform: scale(1.02);
+      }
+
+      /* Enhance title animations */
+      .publication-title {
+        color: #222;
+        transition: all 0.3s ease;
+      }
+      .csd-var-gradient {
+        background: linear-gradient(90deg, #ff7e7e 0%, #7ecbff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+        transition: all 0.3s ease;
+        font-family: "Pacifico", cursive;
+        font-size: 1em;
+        letter-spacing: 0.03em;
+      }
+
+      /* Remove box effect from main header area and all parents */
+      .hero,
+      .hero .container,
+      .hero .columns,
+      .hero .column,
+      .hero .column.has-text-centered {
+        background: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+      }
+
+      /* Enhance carousel */
+      .carousel {
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      /* Add gradient background to hero section */
+      .hero {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+
+      /* Sketch Carousel Demo Styles */
+      @import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap");
+      .sketch-carousel-outer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-width: 0;
+      }
+      .sketch-carousel-container {
+        width: 320px;
+        max-width: 95vw;
+        transition: width 1.2s cubic-bezier(0.77, 0, 0.175, 1),
+          border-radius 1.2s cubic-bezier(0.77, 0, 0.175, 1),
+          padding 0.5s cubic-bezier(0.77, 0, 0.175, 1),
+          background 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        border-radius: 32px;
+        font-family: "Inter", "Noto Sans", Arial, sans-serif;
+        padding: 5px 24px 64px 24px;
+        margin: 0 auto 2rem auto;
+        max-width: min(1200px, var(--max-width, 1400px));
+        background: linear-gradient(90deg, #ffeaea 0%, #fff 50%, #eaf6ff 100%);
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 420px;
+        margin-top: 25px;
+      }
+      .sketch-carousel-container.decomposed {
+        width: min(1200px, var(--max-width, 1400px));
+        max-width: 95vw;
+        border-radius: 32px;
+      }
+      .sketch-carousel-inner {
+        width: 1000px;
+        max-width: 100vw;
+        margin: 0 auto;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        grid-template-columns: 1fr;
+        position: relative;
+        padding-left: 56px;
+        padding-right: 56px;
+      }
+      .sketch-carousel-headings {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+        margin-bottom: 0.5em;
+        padding: 0 32px;
+        position: relative;
+        z-index: 2;
+      }
+      .sketch-carousel-heading {
+        font-family: "Pacifico", cursive;
+        font-size: 2.2em;
+        border-radius: 20px 20px 0 0;
+        padding: 0.1em 1.2em 0.1em 1.2em;
+        background: none;
+        box-shadow: none;
+        margin-bottom: 0;
+        letter-spacing: 0.02em;
+        user-select: none;
+      }
+      .sketch-carousel-heading-content {
+        color: #f36b3b;
+        background: none;
+        margin-left: 0em;
+      }
+      .sketch-carousel-heading-style {
+        color: #2a7be4;
+        background: none;
+        margin-right: 0em;
+      }
+      .sketch-carousel-heading-center {
+        color: #000000;
+        background: none;
+        margin-right: 0em;
+      }
+      .sketch-carousel-images-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+        justify-content: space-evenly;
+      }
+      .sketch-card {
+        width: 250px;
+        height: 250px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0 4px;
+        background: none;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        text-align: center;
+      }
+      .sketch-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 18px;
+        margin: 0;
+        border: 2px solid #dddddd00;
+        background: none;
+        box-shadow: none;
+      }
+      .sketch-arrow {
+        background: none;
+        border: none;
+        border-radius: 0;
+        font-size: 2.6em;
+        color: #222;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.2s;
+        padding: 0;
+        height: auto;
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        box-shadow: none;
+      }
+      .sketch-arrow:hover {
+        color: #f36b3b;
+      }
+      .sketch-arrow.left {
+        left: 16px;
+      }
+      .sketch-arrow.right {
+        right: 16px;
+      }
+      .sketch-label {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+        font-family: monospace;
+        line-height: 1.1;
+        min-height: 48px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      .sketch-label .faded {
+        color: #bbb;
+        font-weight: 400;
+        opacity: 0.85;
+      }
+      .sketch-label .bold {
+        color: #222;
+        font-weight: 700;
+        opacity: 1;
+      }
+      .sketch-keys {
+        margin-bottom: 0px;
+        text-align: center;
+      }
+      .sketch-key-btn {
+        margin: 0 4px;
+        padding: 2px 8px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
+        background: #fff;
+        font-family: inherit;
+        cursor: pointer;
+        font-size: 0.95em;
+        transition: background 0.2s, border 0.2s;
+      }
+      .sketch-key-btn.selected,
+      .sketch-key-btn:hover {
+        background: #e0e0e0;
+        border: 1.5px solid #222;
+      }
+      .sketch-key-span {
+        margin: 0 2px;
+        padding: 0 2px;
+        border-radius: 3px;
+        transition: background 0.2s;
+      }
+      .sketch-key-span.faded {
+        color: #bbb;
+        font-weight: 400;
+        opacity: 0.85;
+      }
+      .sketch-key-span.bold {
+        color: #222;
+        font-weight: 700;
+        opacity: 1;
+        text-decoration: underline;
+      }
+      .sketch-key-span:hover {
+        background: #e0e0e0;
+      }
+      .sketch-label.center {
+        font-family: "Architects Daughter", cursive;
+        font-size: 1.5em;
+      }
+      @keyframes lively-glow-red {
+        0%,
+        100% {
+          box-shadow: 0 0 16px 4px #ffb3b3aa;
+        }
+        50% {
+          box-shadow: 0 0 32px 8px #ff7e7e;
+        }
+      }
+      @keyframes lively-glow-blue {
+        0%,
+        100% {
+          box-shadow: 0 0 16px 4px #b3e0ffaa;
+        }
+        50% {
+          box-shadow: 0 0 32px 8px #7ecbff;
+        }
+      }
+      #sketch-img-left.glow {
+        border: 2px solid #ffb3b3;
+        box-shadow: 0 0 16px 4px #ffb3b3aa;
+        animation: lively-glow-red 1.8s infinite alternate;
+      }
+      #sketch-img-right.glow {
+        border: 2px solid #b3e0ff;
+        box-shadow: 0 0 16px 4px #b3e0ffaa;
+        animation: lively-glow-blue 1.8s infinite alternate;
+      }
+
+      .video-bg-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        overflow: hidden;
+      }
+      .video-bg {
+        width: 100vw;
+        height: 100%;
+        object-fit: cover;
+        min-height: 400px; /* adjust as needed */
+      }
+      .video-bg-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(
+          255,
+          255,
+          255,
+          0.6
+        ); /* or a gradient for more effect */
+        z-index: 1;
+      }
+      .hero-body,
+      .hero .container,
+      .hero .columns,
+      .hero .column {
+        position: relative;
+        z-index: 2;
+      }
+
+      /* --- Sketch Carousel Decompose Animation --- */
+      #sketch-card-left,
+      #sketch-card-right {
+        opacity: 0;
+        transform: scale(0.8);
+        pointer-events: none;
+        transition: opacity 0.5s, transform 0.5s;
+      }
+      #sketch-carousel-container:not(.decomposed) #sketch-card-left,
+      #sketch-carousel-container:not(.decomposed) #sketch-card-right {
+        display: none;
+      }
+      #sketch-carousel-container.decomposed #sketch-card-left,
+      #sketch-carousel-container.decomposed #sketch-card-right {
+        display: flex;
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+      }
+      #decompose-btn {
+        display: block;
+        margin: 40px auto 0 auto;
+        padding: 12px 32px;
+        font-size: 1.2em;
+        border-radius: 8px;
+        background: #f36b3b;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s;
+        min-height: 44px;
+        min-width: 120px;
+        position: relative;
+        overflow: hidden;
+      }
+      #sketch-carousel-container.decomposed #decompose-btn {
+        display: none;
+      }
+
+      .sketch-carousel-container.animating .sketch-carousel-heading-content,
+      .sketch-carousel-container.animating .sketch-carousel-heading-style,
+      .sketch-carousel-container.animating #sketch-label-left,
+      .sketch-carousel-container.animating #sketch-label-right {
+        visibility: hidden !important;
+      }
+
+      .sketch-carousel-container.animating .sketch-arrow {
+        display: none !important;
+      }
+
+      .sketch-carousel-container.animating #sketch-prev,
+      .sketch-carousel-container.animating #sketch-next {
+        display: none !important;
+      }
+
+      .sketch-carousel-container.no-animate {
+        transition: none !important;
+      }
+
+      #decompose-btn.sheer-light {
+        position: relative;
+        overflow: hidden;
+      }
+      #decompose-btn.sheer-light::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: skewX(-20deg);
+        animation: sheer-light-move 1.8s infinite;
+        pointer-events: none;
+      }
+      @keyframes sheer-light-move {
+        0% {
+          left: -75%;
+        }
+        100% {
+          left: 125%;
+        }
+      }
+
+      .container.approach-wider {
+        max-width: var(--max-width, 1350px);
+        width: 100%;
+      }
+      @media (max-width: var(--max-width, 1350px)) {
+        .container.approach-wider {
+          max-width: 100vw;
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      .container,
+      .container.is-max-desktop,
+      .container.approach-wider {
+        max-width: var(--max-width, 1350px) !important;
+        width: 100%;
+      }
+      @media (min-width: var(--max-width, 1350px)) {
+        .container,
+        .container.is-max-desktop,
+        .container.approach-wider {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+      .author-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2em;
+        font-size: 1.3em !important;
+        color: #29477a;
+        margin-bottom: 1em;
+      }
+      .author-list .author-block {
+        white-space: nowrap;
+      }
+      .author-list .author-block:not(:last-child)::after {
+        content: "";
+      }
+
+      .pub-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.6em 1.4em;
+        border-radius: 2em;
+        font-size: 1.1em;
+        font-weight: 500;
+        text-decoration: none;
+        background: #222;
+        color: #fff;
+        transition: background 0.2s, color 0.2s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .pub-btn-arxiv {
+        background: #222;
+      }
+      .pub-btn-bibtex {
+        background: #000;
+      }
+      .pub-btn-hf {
+        background: #000;
+      }
+      .pub-btn-paper {
+        background: #888;
+      }
+      .pub-btn-code {
+        background: #888;
+      }
+      .pub-btn:hover {
+        filter: brightness(1.1);
+        color: #fff;
+      }
+      .pub-btn[style*="pointer-events: none"] {
+        cursor: not-allowed;
+      }
+
+      /* Add improved Gallery styles */
+      .gallery-table {
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
+        align-items: center;
+        width: 100%;
+      }
+      .gallery-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr;
+        gap: 2vw;
+        align-items: center;
+        background: linear-gradient(to bottom, #f2dadc, #cde1f6);
+        border-radius: 32px;
+        box-shadow: 0 4px 24px 0 rgba(60, 60, 60, 0.07);
+        padding: 2vw 1vw;
+        width: 100%;
+        max-width: min(1200px, var(--max-width, 1600px));
+        margin: 0 auto 2em auto;
+      }
+      .gallery-ref-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+      .gallery-img-single {
+        width: 100%;
+        aspect-ratio: 1/1;
+        max-width: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(60, 60, 60, 0.07);
+        /* border: 2px solid #000000; */
+        background: #faf9f7;
+      }
+      .gallery-grid-2x2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 1vw;
+        width: 100%;
+        height: 100%;
+      }
+      .gallery-img-large {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(60, 60, 60, 0.07);
+        /* border: 2px solid #000000; */
+        background: #faf9f7;
+      }
+      .gallery-img-container {
+        position: relative;
+        display: inline-block;
+      }
+      .gallery-label-box {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgb(0, 0, 0);
+        color: yellow;
+        font-size: 1em;
+        font-family: "Architects Daughter", cursive, sans-serif;
+        padding: 4px 12px;
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.07);
+        pointer-events: none;
+        z-index: 2;
+        display: none; /* Hide by default */
+      }
+      .gallery-label-box.switti-label,
+      .gallery-label-box.infinity-label {
+        display: block; /* Show only for Switti and Infinity */
+      }
+      .ref-text {
+        text-align: center;
+        margin-top: 8px;
+        color: #000000;
+        font-size: 1.2em;
+        font-family: "Architects Daughter", cursive, sans-serif;
+      }
+      @media (max-width: 1400px) {
+        .gallery-row,
+        .gallery-header-row {
+          gap: 0.7em;
+        }
+        .gallery-col,
+        .gallery-img-single,
+        .gallery-img-grid {
+          width: 220px;
+          min-width: 120px;
+        }
+        .gallery-img-single,
+        .gallery-img-grid {
+          height: 220px;
+        }
+        .gallery-img-grid {
+          padding: 3px;
+        }
+      }
+      @media (max-width: 900px) {
+        .gallery-row,
+        .gallery-header-row {
+          flex-direction: column;
+          gap: 0.7em;
+          align-items: center;
+        }
+        .gallery-col {
+          width: 100%;
+          min-width: 0;
+        }
+        .gallery-img-single,
+        .gallery-img-grid {
+          width: 90vw;
+          max-width: 320px;
+          height: 90vw;
+          max-height: 320px;
+        }
+      }
+
+      .abstract-section-custom {
+        background: #f6f6f6;
+        border-radius: 18px;
+        max-width: 950px;
+        margin: 3.5em auto 3.5em auto;
+        padding: 2.5em 2.2em 2.2em 2.2em;
+        box-shadow: 0 2px 16px 0 rgba(60, 60, 60, 0.04);
+        text-align: center;
+      }
+      .abstract-section-custom h2.title {
+        color: #333;
+        font-weight: 700;
+        font-size: 2em;
+        margin-bottom: 0.7em;
+      }
+      .abstract-section-custom .content {
+        color: #555;
+        font-size: 1em;
+        line-height: 1.6;
+        text-align: center;
+        margin: 0 auto;
+        max-width: 800px;
+      }
+      @media (max-width: 1100px) {
+        .abstract-section-custom {
+          max-width: 98vw;
+          padding: 1.2em 0.5em;
+        }
+        .abstract-section-custom .content {
+          font-size: 1.05em;
+        }
+      }
+
+      .gallery-img-hover {
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .gallery-img-hover:hover {
+        transform: scale(1.05);
+        z-index: 3;
+      }
+      .gallery-prompt-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(
+          0,
+          0,
+          0,
+          0.55
+        ); /* fallback, will be overridden by type class */
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        font-size: 1.25em;
+        font-family: "Noto Sans", serif;
+        text-align: center;
+        padding: 1em;
+        border-radius: 10px;
+        transition: opacity 0.2s;
+        z-index: 2;
+      }
+      .gallery-prompt-overlay.overlay-content {
+        background: rgba(200, 40, 40, 0.82);
+        color: #fff;
+      }
+      .gallery-prompt-overlay.overlay-style {
+        background: rgba(30, 80, 180, 0.82);
+        color: #fff;
+      }
+      .gallery-img-hover:hover .gallery-prompt-overlay {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .gallery-scroll-wrapper {
+        max-height: 100vh;
+        overflow-y: auto;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      #qualitative-carousel-wrapper {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      #qualitative-carousel.qual-carousel-immersive {
+        width: 100%;
+        aspect-ratio: 2.2/1;
+        min-height: 260px;
+        max-width: 100vw;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 32px;
+        box-shadow: 0 4px 32px 0 rgba(60, 60, 60, 0.1);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: box-shadow 0.3s;
+      }
+      #qual-carousel-track {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+        will-change: transform;
+      }
+      .qual-carousel-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 0;
+        background: #fff;
+        flex: 0 0 100%;
+        box-shadow: none;
+        user-select: none;
+        pointer-events: none;
+        display: block;
+        padding: 18px;
+        box-sizing: border-box;
+      }
+      @media (max-width: 1200px) {
+        #qualitative-carousel.qual-carousel-immersive {
+          aspect-ratio: 1.7/1;
+        }
+      }
+      @media (max-width: 900px) {
+        #qualitative-carousel.qual-carousel-immersive {
+          aspect-ratio: 1.2/1;
+          border-radius: 18px;
+        }
+        .qual-carousel-img {
+          padding: 8px;
+        }
+      }
+      @media (max-width: 600px) {
+        #qualitative-carousel.qual-carousel-immersive {
+          aspect-ratio: 1/1.2;
+          min-height: 120px;
+          border-radius: 12px;
+        }
+      }
+
+      .gallery-img-border-content {
+        border: 3px solid #ffb3b3 !important;
+      }
+      .gallery-img-border-style {
+        border: 3px solid #b3d1ff !important;
+      }
+    </style>
+  </body>
+</html>
